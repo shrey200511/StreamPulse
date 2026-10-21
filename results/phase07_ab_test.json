@@ -1,0 +1,69 @@
+{
+  "_source": "REAL_DATA",
+  "dataset": "Cookie Cats (Tactile Entertainment), public A/B test data",
+  "file_sha256": "5ab54d761fbddcd50de7b88e4eaf7837cba4569474f50c043a4d17ee342c46bd",
+  "rows": 90189,
+  "group_sizes": {
+    "gate_30": 44700,
+    "gate_40": 45489
+  },
+  "srm": {
+    "chi2": 6.9024049496058275,
+    "p_value": 0.008607987810836262,
+    "detected_at_0.01": true
+  },
+  "retention": [
+    {
+      "metric": "retention_1",
+      "rate_gate_30": 0.4481879194630872,
+      "rate_gate_40": 0.44228274967574577,
+      "diff_pp": -0.5905169787341458,
+      "diff_ci_low_pp": -1.2392558656738064,
+      "diff_ci_high_pp": 0.058221908205514844,
+      "relative_change": -0.01317565585974659,
+      "z": 1.7840862247974725,
+      "p_value": 0.07440965529691913,
+      "cohens_h": -0.011881898259223478,
+      "gate_30_ci": [
+        0.44358236514774474,
+        0.45280237833639625
+      ],
+      "gate_40_ci": [
+        0.43772374727049607,
+        0.44685149948007
+      ]
+    },
+    {
+      "metric": "retention_7",
+      "rate_gate_30": 0.19020134228187918,
+      "rate_gate_40": 0.18200004396667327,
+      "diff_pp": -0.8201298315205913,
+      "diff_ci_low_pp": -1.328164577146224,
+      "diff_ci_high_pp": -0.3120950858949586,
+      "relative_change": -0.043119034896460164,
+      "z": 3.164358912748191,
+      "p_value": 0.001554249975614329,
+      "cohens_h": -0.021074001016365917,
+      "gate_30_ci": [
+        0.18658979684366292,
+        0.19386613051747012
+      ],
+      "gate_40_ci": [
+        0.17848120097823003,
+        0.18557259139286594
+      ]
+    }
+  ],
+  "retention_7_bootstrap_ci_pp": [
+    -1.3278307640124218,
+    -0.3226304508162673
+  ],
+  "retention_7_share_of_bootstrap_resamples_gate40_lower": 0.999,
+  "gamerounds": {
+    "median_gate_30": 17.0,
+    "median_gate_40": 16.0,
+    "mannwhitney_p": 0.05020880772044255,
+    "max_rounds_one_player": 49854
+  },
+  "decision": "DON'T SHIP gate_40: it significantly lowers 7-day retention."
+}

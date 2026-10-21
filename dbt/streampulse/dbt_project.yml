@@ -1,0 +1,43 @@
+name: streampulse
+version: "1.0.0"
+config-version: 2
+profile: streampulse
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+analysis-paths: ["analyses"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+vars:
+  # The raw data ends here. Anything "after" this date cannot be observed.
+  data_start_date: "2015-01-01"
+  data_end_date: "2017-03-31"
+  # Phase 5 feature cutoff: features may only use information on or before this date.
+  # Churn labels (train_v2) are for memberships expiring in March 2017, so 28 Feb 2017
+  # is the last day we can use without peeking into the churn window.
+  feature_cutoff_date: "2017-02-28"
+  # KKBox's churn rule: no new valid subscription within 30 days of expiry.
+  churn_grace_days: 30
+  # Expiry dates further than this after the transaction are treated as data errors.
+  max_plan_span_days: 450
+  # Users registered before data_start_date may have paid before our data begins
+  # (left-censoring), so cohort analysis only uses users registered on/after it.
+  raw_schema: raw
+
+models:
+  streampulse:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: view
+      +schema: intermediate
+    marts:
+      +materialized: table
+      +schema: marts
+
+tests:
+  streampulse:
+    +severity: error

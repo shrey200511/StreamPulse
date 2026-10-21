@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  - name: kkbox
+    description: >
+      Raw KKBox tables loaded by scripts/load_warehouse.py. members, transactions and
+      churn_labels are COMPLETE. user_logs is a USER-LEVEL SAMPLE (see log_sample_frame
+      and docs/sampling.md).
+    schema: "{{ var('raw_schema') }}"
+    tables:
+      - name: members
+        description: One row per member (members_v3.csv). Demographics + registration date.
+      - name: transactions
+        description: >
+          Payment / renewal / cancellation events (transactions.csv + transactions_v2.csv,
+          unioned; the two files overlap, duplicates are removed in int_transactions__deduped).
+      - name: churn_labels
+        description: >
+          train_v2.csv. Users whose membership expires in March 2017, labelled 1 if they
+          did NOT start a new valid subscription within 30 days of expiry (KKBox's rule).
+      - name: log_sample_frame
+        description: Every known user with their md5 sample bucket and whether their logs were kept.
+      - name: user_logs
+        description: >
+          SAMPLED daily listening logs (user_logs.csv + user_logs_v2.csv) for users with
+          in_log_sample = true only. Never treat aggregates from this table as population totals.

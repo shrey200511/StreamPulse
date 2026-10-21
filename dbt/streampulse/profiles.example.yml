@@ -1,0 +1,20 @@
+# Copy this file to ~/.dbt/profiles.yml (Windows: C:\Users\<you>\.dbt\profiles.yml)
+# and replace YOUR_PROJECT_ID. Never commit the real profiles.yml.
+streampulse:
+  target: bigquery
+  outputs:
+    bigquery:
+      type: bigquery
+      method: oauth                     # uses `gcloud auth application-default login`
+      project: YOUR_PROJECT_ID
+      dataset: dbt_dev                  # models land in dbt_dev_staging / _intermediate / _marts
+      location: US                      # must match the `raw` dataset
+      threads: 4
+      job_execution_timeout_seconds: 300
+      priority: interactive
+
+    duckdb:                             # local run on a laptop, and CI on synthetic data
+      type: duckdb
+      path: "{{ env_var('DUCKDB_PATH', '../../warehouse/streampulse.duckdb') }}"
+      schema: main
+      threads: 4

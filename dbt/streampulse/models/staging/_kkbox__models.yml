@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: stg_kkbox__members
+    description: Members, typed and cleaned. Junk ages set to NULL; blank gender -> 'unknown'.
+    columns:
+      - name: member_id
+        description: KKBox user id (msno), trimmed.
+        data_tests: [not_null, unique]
+      - name: age
+        description: Age in years if 10-80, otherwise NULL (raw bd field is very noisy).
+      - name: gender
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['male', 'female', 'unknown']
+      - name: registration_date
+        description: Date the account was created (parsed from YYYYMMDD integer).
+
+  - name: stg_kkbox__transactions
+    description: All transaction rows from both files, typed. Duplicates still present.
+    columns:
+      - name: member_id
+        data_tests: [not_null]
+      - name: transaction_date
+        data_tests: [not_null]
+      - name: plan_days
+        description: Length of the plan bought, in days.
+      - name: amount_paid_ntd
+        description: Amount actually paid (New Taiwan Dollars). 0 = free / promo / cancel row.
+      - name: is_cancel
+        description: True if this row is a cancellation (user turned off the subscription).
+      - name: source_file
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['transactions', 'transactions_v2']
+
+  - name: stg_kkbox__churn_labels
+    description: KKBox churn labels for memberships expiring in March 2017.
+    columns:
+      - name: member_id
+        data_tests: [not_null, unique]
+      - name: is_churn
+        data_tests: [not_null]
+
+  - name: stg_kkbox__log_sample_frame
+    columns:
+      - name: member_id
+        data_tests: [not_null, unique]
+      - name: sample_bucket
+        description: int(first 8 hex of md5(msno), 16) % 100. Deterministic.
+
+  - name: stg_kkbox__user_logs
+    description: SAMPLED daily listening logs, typed. Not population totals.
+    columns:
+      - name: member_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_kkbox__log_sample_frame')
+                field: member_id
+      - name: activity_date
+        data_tests: [not_null]

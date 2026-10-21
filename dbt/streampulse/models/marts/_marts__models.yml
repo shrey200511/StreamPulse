@@ -1,0 +1,112 @@
+version: 2
+
+models:
+  # ---------------------------------------------------------------- core
+  - name: fct_subscriptions
+    description: >
+      One row per subscription period (a paid or renewal transaction), with its effective
+      end date (shortened if cancelled) and whether it ended in churn under KKBox's rule
+      (no new period within 30 days of the end). is_churned is NULL when the 30 days after
+      the end fall outside the data.
+    columns:
+      - name: subscription_id
+        description: Surrogate key of the transaction that started the period.
+        data_tests: [not_null, unique]
+      - name: member_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_members')
+                field: member_id
+      - name: effective_end_date
+        data_tests: [not_null]
+      - name: plan_length_bucket
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['01. <=7 days (trial/short)', '02. ~1 month', '03. ~3 months', '04. ~6 months', '05. 12+ months']
+      - name: monthly_price_ntd
+        description: Amount paid normalised to a 30-day plan.
+      - name: is_churned
+        description: True/False when observable, NULL otherwise.
+
+  - name: dim_members
+    description: >
+      One row per member seen in any table. Includes cohort month (month of first observed
+      period), is_new_customer (left-censoring guard), first plan group, churn label and
+      whether the member's logs are in the sample.
+    columns:
+      - name: member_id
+        data_tests: [not_null, unique]
+      - name: first_plan_group
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Free / promo start', 'Short plan start', 'Monthly, auto-renew', 'Monthly, manual', 'Multi-month plan']
+      - name: is_new_customer
+        description: Registered on/after the data start, so the first observed period is the real first one.
+
+  - name: fct_daily_activity
+    description: One row per member-day of listening. SAMPLED users only (see docs/sampling.md).
+    columns:
+      - name: activity_key
+        data_tests: [not_null, unique]
+      - name: member_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_members')
+                field: member_id
+      - name: completion_rate
+        description: Share of plays listened to at least 75%.
+
+  # ---------------------------------------------------------------- analytics
+  - name: mart_churn_features
+    description: >
+      Model-ready features for the churn-label population, all as of feature_cutoff_date
+      (28 Feb 2017). Listening features are NULL for members outside the log sample.
+    columns:
+      - name: member_id
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('dim_members')
+                field: member_id
+      - name: is_churn
+        data_tests: [not_null]
+
+  - name: mart_churn_by_segment
+    description: Churn rate, share of users and lift vs overall, by every segment dimension (long format).
+    columns:
+      - name: dimension
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['plan_length', 'auto_renew', 'payment_method', 'monthly_price', 'discounted', 'cancelled_before', 'age', 'tenure']
+
+  - name: mart_monthly_kpis
+    description: Monthly active subscribers (month-end), new customers, cash revenue, ARPU, renewal churn.
+    columns:
+      - name: month_start
+        data_tests: [not_null, unique]
+
+  - name: mart_daily_revenue
+    description: Daily cash revenue (payment date). Input to the seasonal forecast.
+    columns:
+      - name: revenue_date
+        data_tests: [not_null, unique]
+
+  - name: mart_cohort_retention
+    description: Retention by signup cohort, first plan group and months since signup (counts + rates).
+
+  - name: mart_ltv_by_segment
+    description: Observed first-12-month value of new customers by first plan / payment method / age.
+
+  - name: mart_value_at_risk
+    description: Revenue lost to churn by auto-renew x plan length x price band. Annualised values are an assumption.
+
+  - name: mart_data_quality
+    description: Row counts for every data-quality issue found and handled.
