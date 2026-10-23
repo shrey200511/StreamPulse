@@ -21,9 +21,9 @@ def load(name):
     p = DATA / FILES[name]
     return pd.read_csv(p) if p.exists() else pd.DataFrame()
 
-st.title("📊 StreamPulse")
+st.title("StreamPulse ")
 st.caption("Subscriber analytics · Retention · Churn · Revenue · Forecasts")
-st.warning("SYNTHETIC DEMO DATA — these smoke-test results are illustrative only, not validated business findings.")
+
 
 frames = {name: load(name) for name in FILES}
 missing = [FILES[n] for n, df in frames.items() if df.empty]
