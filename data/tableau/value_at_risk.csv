@@ -1,0 +1,15 @@
+auto_renew,plan_length,price_band,segment_label,users,churners,churn_rate,monthly_revenue_ntd,monthly_revenue_lost_ntd,annualised_revenue_lost_ntd_assumption,share_of_revenue_lost,value_at_risk_rank
+auto-renew on,02. ~1 month,130-149,auto-renew on | 02. ~1 month | 130-149,733,51.0,0.06957708,109217.0,7599.0,91188.0,0.5359334226673249,1
+auto-renew off,02. ~1 month,130-149,auto-renew off | 02. ~1 month | 130-149,75,21.0,0.28,11175.0,3129.0,37548.0,0.2206784681571338,2
+auto-renew on,02. ~1 month,100-129,auto-renew on | 02. ~1 month | 100-129,112,8.0,0.071428575,14448.0,1032.0,12384.0,0.07278369419564144,3
+auto-renew on,02. ~1 month,1-99,auto-renew on | 02. ~1 month | 1-99,109,9.0,0.08256881,10791.0,891.0,10692.0,0.06283941039565555,4
+auto-renew off,04. ~6 months,130-149,auto-renew off | 04. ~6 months | 130-149,26,3.0,0.115384616,3874.0,447.0,5364.0,0.03152549545101911,5
+auto-renew off,02. ~1 month,1-99,auto-renew off | 02. ~1 month | 1-99,11,4.0,0.36363637,1089.0,396.0,4752.0,0.027928626842513578,6
+auto-renew off,02. ~1 month,100-129,auto-renew off | 02. ~1 month | 100-129,12,3.0,0.25,1548.0,387.0,4644.0,0.02729388532336554,7
+auto-renew off,03. ~3 months,130-149,auto-renew off | 03. ~3 months | 130-149,37,2.0,0.054054055,5513.0,298.0,3576.0,0.021016996967346074,8
+auto-renew off,03. ~3 months,0 (free),auto-renew off | 03. ~3 months | 0 (free),1,0.0,0.0,0.0,0.0,0.0,0.0,9
+auto-renew off,05. 12+ months,130-149,auto-renew off | 05. 12+ months | 130-149,7,0.0,0.0,915.8048858642578,0.0,0.0,0.0,9
+auto-renew off,04. ~6 months,0 (free),auto-renew off | 04. ~6 months | 0 (free),1,0.0,0.0,0.0,0.0,0.0,0.0,9
+auto-renew on,02. ~1 month,0 (free),auto-renew on | 02. ~1 month | 0 (free),36,1.0,0.027777778,0.0,0.0,0.0,0.0,9
+auto-renew off,01. <=7 days (trial/short),0 (free),auto-renew off | 01. <=7 days (trial/short) | 0 (free),8,5.0,0.625,0.0,0.0,0.0,0.0,9
+auto-renew off,02. ~1 month,0 (free),auto-renew off | 02. ~1 month | 0 (free),4,0.0,0.0,0.0,0.0,0.0,0.0,9

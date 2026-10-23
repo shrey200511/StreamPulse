@@ -25,3 +25,7 @@ jupyter
 nbconvert
 nbformat
 ipykernel
+
+# StreamPulse web dashboard
+streamlit>=1.38,<2.0
+plotly>=5.20,<7.0

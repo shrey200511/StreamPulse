@@ -70,7 +70,7 @@ def main() -> None:
 
     def copy(sql: str, name: str) -> int:
         con.execute(f"COPY ({sql}) TO '{(out / name).as_posix()}' (FORMAT PARQUET, COMPRESSION ZSTD)")
-        n = con.sql(f"SELECT COUNT(*) FROM '{(out / name).as_posix()}'").fetchone()[0]
+        n = con.sql(f"SELECT COUNT(*) FROM '{(out / name).as_posix()}'").fetchall()[0][0]
         print(f"  {name:28s} {n:>14,d} rows   ({time.time() - t0:,.0f}s)")
         return n
 
@@ -108,7 +108,7 @@ def main() -> None:
             SELECT COUNT(*) AS rows_total,
                    COUNT(DISTINCT l.msno) AS users_total,
                    SUM(CASE WHEN f.in_log_sample THEN 1 ELSE 0 END) AS rows_in_sample
-            FROM ({logs}) l LEFT JOIN {frame} f USING (msno)""").fetchone()
+            FROM ({logs}) l LEFT JOIN {frame} f USING (msno)""").fetchall()[0]
         report["user_logs_full"] = {"rows": r[0], "users": r[1], "rows_in_sample": r[2]}
         print(f"  full logs: {r[0]:,} rows, {r[1]:,} users; sampled rows: {r[2]:,}")
 
@@ -123,7 +123,7 @@ def main() -> None:
         SELECT COUNT(*) AS n, AVG(is_churn) AS churn_rate,
                SUM(CASE WHEN f.in_log_sample THEN 1 ELSE 0 END) AS n_sample,
                AVG(CASE WHEN f.in_log_sample THEN is_churn END) AS churn_rate_sample
-        FROM {lab} l LEFT JOIN {frame} f USING (msno)""").fetchone()
+        FROM {lab} l LEFT JOIN {frame} f USING (msno)""").fetchall()[0]
     report["label_population"] = {"users": r[0], "churn_rate": r[1],
                                   "users_in_log_sample": r[2], "churn_rate_in_log_sample": r[3]}
     report["parquet_mb"] = {p.name: round(p.stat().st_size / 1e6, 1) for p in out.glob("*.parquet")}

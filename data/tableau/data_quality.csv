@@ -1,0 +1,9 @@
+table_name,check_name,affected_rows,total_rows
+transactions,duplicate rows removed,339.0,28912.0
+transactions,expiry date missing/unparseable,0.0,28573.0
+transactions,expiry before transaction date,85.0,28573.0
+transactions,expiry more than max_plan_span_days after transaction,0.0,28573.0
+members,age missing or outside 10-80,2549.0,3807.0
+members,gender unknown,1553.0,3807.0
+dim_members,paying member missing from members table,173.0,3588.0
+fct_daily_activity (sampled),days with invalid listen seconds,131.0,71586.0

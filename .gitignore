@@ -1,19 +1,24 @@
-# Python
+﻿# Python
 .venv/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
 
-# Data: never committed (size + Kaggle licence)
+# Data: exclude raw/local data by default
 data/
 *.7z
 *.csv
 *.csv.gz
 *.parquet
-!dashboard/data/*.csv
-!results/*.csv
 
-# Local warehouse (DuckDB) and synthetic test outputs
+# Allow only the dashboard's synthetic demo exports
+!data/
+data/*
+!data/tableau/
+data/tableau/*
+!data/tableau/*.csv
+
+# Local warehouse and synthetic test outputs
 warehouse/
 results/_SYNTHETIC_TEST_ONLY/
 tests/fixtures/generated/

@@ -51,7 +51,7 @@ def load_duckdb(src: Path, path: Path) -> None:
     con.execute("CREATE SCHEMA IF NOT EXISTS raw")
     for name in TABLES:
         con.execute(f"CREATE OR REPLACE TABLE raw.{name} AS SELECT * FROM '{(src / f'{name}.parquet').as_posix()}'")
-        n = con.sql(f"SELECT COUNT(*) FROM raw.{name}").fetchone()[0]
+        n = con.sql(f"SELECT COUNT(*) FROM raw.{name}").fetchall()[0][0]
         print(f"  raw.{name:20s} {n:>12,d} rows")
     con.close()
 
